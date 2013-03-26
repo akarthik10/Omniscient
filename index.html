@@ -1,0 +1,357 @@
+<html>
+
+<head>
+
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+
+function retract(){
+
+//$(".header").attr("height", "65px");
+$(".header").toggle(10, function(){
+	$(".header").toggle(500);
+});
+
+}
+
+
+function sendData(){
+	$('.xbutton').hide();
+	if($("#btn").html()=="Submitting.."){
+		return;
+	}
+	if($('#ipbox').val()==""){
+		$("#ipbox").attr( "placeholder","Please enter something here");
+		$("#ipbox").effect("shake", { times:3 }, 300);
+		return;
+	}
+
+	$(".result").html("<div class=\"waitdiv\">Just a moment, we're working for you..</div>").css( { opacity: 0, "margin-top": "-100px" } );
+	
+	$('.result').animate( {opacity: 1, "margin-top": "-70px"}, 1450, 'swing' );
+
+	$("#btn").html("Submitting..");
+	
+	
+	var itext = $('#ipbox').val();
+	$.get("wolfram.php","q="+encodeURIComponent(itext), function(data) {
+		if(data=="<table></table>"){
+			data="<div class=\"waitdiv\"> Did you just ask \"Who is my best friend?\" ? <br />Because we don't have an answer for your question yet. </div>";
+		}	
+	$(".result").html(data).css( { opacity: 0, "margin-top": "-20px" } );
+	$('html,body').animate({
+        scrollTop: $(".resultwrap").offset().top},
+        'slow');
+	$('.result').animate( {opacity: 1, "margin-top": 0}, 450, 'swing' );
+	$("#btn").html("Submit");
+	});
+
+}
+
+function getData(){
+	alert($('#ipbox').val());
+}
+
+//Detect IE Begin
+var ie = (function(){
+
+    var undef,
+        v = 3,
+        div = document.createElement('div'),
+        all = div.getElementsByTagName('i');
+
+    while (
+        div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
+        all[0]
+    );
+
+    return v > 4 ? v : undef;
+
+}());
+
+//Detect IE end
+
+if(ie){
+	window.location.href="./ie.html";
+}
+
+
+	
+	
+
+
+$(document).ready(function(){
+   $('.announce').hover(function() {
+    
+    $('.announce').fadeOut(500, function() {
+        $(this).html('<p style="margin:30px;">Unsure? Check out some examples below or click More Examples</p>').fadeIn(500);
+    });
+   
+}, function() {
+    
+    $('.announce').fadeOut(500, function() {
+        $(this).text("Type anything you want to know about, or something that has an answer which you're looking for.").fadeIn(500);
+    });
+});
+
+ 
+});
+
+function rf(c){
+	$('.overlay').fadeOut(500);
+	$('#ipbox').val($(c).text());
+	 $('html,body').animate({scrollTop: $('#ipbox').offset().top},'slow');
+	 sendData();
+	 
+	 return false;
+}
+
+function addExample(example){
+
+	$(".ovholder").append("<a href=\"#\" onClick=\"return rf(this);\">"+example+"</a><br />");
+}
+
+
+
+
+</script>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Merienda+One">
+
+<link href="style.css" rel="stylesheet" type="text/css">
+
+
+
+</head>
+
+<title>
+	Omniscient
+</title>
+
+
+<body>
+
+<div id="wrap">
+	<div class="mainwrap">
+		<div class="header">
+			<span class="fwb"> </span> Omniscient <span class="fwb"> </span>
+		</div>
+
+		<div class="announce">
+				Type anything you want to know about, or something that has an answer which you're looking for.
+		</div>
+
+		
+
+		
+		<header>
+					<span class="icon">
+						<span class="s1"> </span>
+						<span class="s2"> </span>
+						<span class="s3"> </span>
+						<span class="s4"> </span>
+					</span>
+					<span class="title">Need examples?</span>
+					<div class="social" id="social">
+					</div>
+					<div class="socialimage">
+						<img src="data:image/png;base64,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"></img>
+					</div>
+
+					<section class="content">
+						<div class="exp">
+						<p class="examples">
+
+							<a href="#" onClick="$('#ipbox').val('iron man 3 release date'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">iron man 3 release date</a></br>
+							<a href="#" onClick="$('#ipbox').val('usain bolt height'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">usain bolt height</a></br>
+							<a href="#" onClick="$('#ipbox').val('sin 15 degree'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">sin 15 degree</a></br>
+							<a href="#" onClick="$('#ipbox').val('distance between bangalore and mysore'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">distance between bangalore and mysore</a></br>
+						<a href="#" onClick="$('#ipbox').val('area of karnataka'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">area of karnataka</a></br>
+							<a href="#" onClick="$('#ipbox').val('solve x^2+4x+4'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">solve x^2+4x+4</a></br>
+							<a href="#" onClick="$('#ipbox').val('(x+a)^2'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">(x+a)^2</a></br>
+							<a href="#" onClick="$('#ipbox').val('taylor series'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">taylor series</a></br>
+							<a href="#" onClick="$('#ipbox').val('entrepreneur meaning'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">entrepreneur meaning</a></br>
+							<a href="#" onClick="$('#ipbox').val('500 MB download at 100 kBps'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">500 MB download at 100 kBps</a></br>
+							<a href="#" onClick="$('#ipbox').val('when was manmohan singh born?'); $('html,body').animate({
+        scrollTop: $('#ipbox').offset().top},
+        'slow');sendData();return false;">when was manmohan singh born?</a></br>
+							<span class="follow-us">
+								.. or maybe anything you think that has an answer
+							</span>
+						</p>
+					</div>
+						<p class="about-project">
+							Type something that looks like a question, a fact that has an answer, a domain-specific term, a mathematical equation or an expression to solve, an english word whose meaning you're looking for, or whatever you like.. 
+							</br></br>
+							
+						</p>
+						<div class="morex" onClick=" retract(); $('.overlay').fadeIn(200); $('.xbutton').show(); $('html,body').animate({
+        scrollTop: $('.lyfk').offset().top},
+        'slow'); ">
+							Need more interesting examples?
+						</div>
+					</section>
+					<div class="lyfk">
+					
+					</div>
+				</header>
+
+
+
+<div class="xbutton" onClick=" $('.overlay').fadeOut(500, function(){$('.xbutton').hide();}); $('html,body').animate({
+        scrollTop: $('.mainwrap').offset().top},
+        'slow');">X</div>
+<div class="overlay">
+	
+	<div class="ovholder">
+	</div>
+
+</div>
+
+
+
+
+				<section class="gettext">
+					<input type="text" id="ipbox" placeholder="Please type here and click submit" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Please type here and click submit'">
+					
+				</section>
+				<!--<div class="buttonholder" onClick="sendData(); return false;">
+				<input type="submit" id="btn" value="Submit" >
+				</div>-->
+
+
+				<div id="container_button">
+					<div id="hole">
+						<div id="button" onClick="sendData(); return false;">
+							<div id="btn">Submit</div>
+						</div>
+					</div>
+				</div>
+				
+					
+						
+					
+				
+
+				<div class="resultwrap">
+				<section class="showresult">
+					<p class="result">
+						
+
+					</p>
+
+				</section>
+		
+				</div>
+						
+	
+	</div>
+	<a class='by' href='http://akarthik10.wordpress.com/?p=241' target="_blank">See how this was built | http://akarthik10.wordpress.com/?p=241</a>
+						<a class='git' title='View source on Github' href='https://github.com/' target="_blank">Source on Github</a>
+</div>
+<script type="text/javascript">
+$('#ipbox').keypress(function (e) {
+  if (e.which == 13) {
+    sendData();
+    return false;   
+  }
+});
+
+
+setTimeout(function(){
+			// tweet button
+			var tweeter = $('<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>');
+			// facebook 'like' button
+			var fbLike = $('<iframe class="fbLike" src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fomniscient-web.appspot.com&send=false&layout=button_count&width=450&show_faces=false&font=trebuchet+ms&colorscheme=light&action=like&height=35"></iframe>');
+			$('#social').append(fbLike, tweeter);
+			
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="http://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+
+			window.getComputedStyle(fbLike[0]).getPropertyValue('top');
+			$('.social').addClass('show');
+		},500);
+
+
+</script>
+
+
+
+<script type="text/javascript">
+addExample("father's mother's sister's son");
+addExample("315 to binary");
+addExample("sierpinski gasket");
+addExample("plot x^3 - 6x^2 + 4x + 12");
+addExample("factor 2x^5 - 19x^4 + 58x^3 - 67x^2 + 56x - 48");
+addExample("derivative of x^4 sin x");
+addExample("dy/dx ^2 + dy/dx = 0");
+addExample("Oscar for best actress 2013");
+addExample("maximize x(1-x)e^x");
+addExample("Jurassic");
+addExample("earthquakes after 2010");
+addExample("saturation vapor pressure 30C");
+addExample("global CO2 level");
+addExample("lepidoptera");
+addExample("myoglobin");
+addExample("120 meters");
+addExample("10 miles + 14 kilometers");
+addExample("A4 paper");
+addExample("basic definition of prime number");
+addExample("How old was Queen Elizabeth II in 1974?");
+addExample("carbon");
+addExample("perchlorate");
+addExample("500 mg of silver nitrate");
+addExample("trimethylamine gas");
+addExample("C6H5COOH");
+addExample("asphalt");
+addExample("work F=30N, d=100m");
+addExample("centripetal acceleration, 30mph, 500 ft");
+addExample("ideal gas law 2.2mol, 2.0atm, 500K");
+addExample("Joules law u=3V, R=1ohm for 10s");
+addExample("adiabatic process Vi=10L, Vf=2L, pi=1atm");
+addExample("lens, f=20ft, o=400ft");
+addExample("mass proton / electron");
+addExample("1980 Nobel Prize in Chemistry");
+addExample("New Delhi");
+addExample("third Tuesday in April");
+addExample("time in New York");
+addExample("Which months have 31 days?");
+addExample("Halleys comet");
+addExample("Andromeda galaxy");
+addExample("Apollo 11");
+addExample("steam 135C");
+addExample("mines over 5000 feet");
+addExample("define triangulate");
+addExample("spell 40");
+addExample("Apple II");
+addExample(".pdf file format");
+addExample("32 coin tosses");
+
+
+
+
+</script>
+
+</body>
+
+
+
+</html>

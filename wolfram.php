@@ -1,7 +1,7 @@
 <?php
 
 
-$APP_ID="XXXXXX-XXXXXXXXXX";
+$APP_ID="XXXXXX-XXXXXXXXXX"; //Replace with your key
 $INPUT=$_REQUEST['q'];
 $URL = "http://api.wolframalpha.com/v2/query?input=".urlencode($INPUT)."&appid=".$APP_ID;
 //echo $URL;
